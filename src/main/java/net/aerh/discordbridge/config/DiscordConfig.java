@@ -36,6 +36,18 @@ public final class DiscordConfig {
                     (cfg, value) -> cfg.allowMentions = value,
                     cfg -> cfg.allowMentions)
             .add()
+            .append(new KeyedCodec<>("Locale", Codec.STRING),
+                    (cfg, value) -> cfg.locale = value,
+                    cfg -> cfg.locale)
+            .add()
+            .append(new KeyedCodec<>("WebhookUrl", Codec.STRING),
+                    (cfg, value) -> cfg.webhookUrl = value,
+                    cfg -> cfg.webhookUrl)
+            .add()
+            .append(new KeyedCodec<>("UseWebhookForChat", Codec.BOOLEAN),
+                    (cfg, value) -> cfg.useWebhookForChat = value,
+                    cfg -> cfg.useWebhookForChat)
+            .add()
             .build();
 
     private static final String DEFAULT_PRESENCE = "Watching the server";
@@ -46,6 +58,9 @@ public final class DiscordConfig {
     private boolean ignoreBotMessages = true;
     private boolean ignoreWebhookMessages = true;
     private boolean allowMentions = false;
+    private String locale = "en-US";
+    private String webhookUrl = "";
+    private boolean useWebhookForChat = false;
 
     @NotNull
     public String getBotToken() {
@@ -74,6 +89,20 @@ public final class DiscordConfig {
 
     public boolean isAllowMentions() {
         return allowMentions;
+    }
+
+    @NotNull
+    public String getLocale() {
+        return locale == null || locale.isBlank() ? "en-US" : locale;
+    }
+
+    @NotNull
+    public String getWebhookUrl() {
+        return webhookUrl == null ? "" : webhookUrl;
+    }
+
+    public boolean isUseWebhookForChat() {
+        return useWebhookForChat;
     }
 
     /**
