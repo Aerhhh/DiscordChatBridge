@@ -6,101 +6,88 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Configuration for customizable message templates.
+ * Configuration for message formatting between Discord and the game.
  */
 public final class MessagesConfig {
 
     public static final BuilderCodec<MessagesConfig> CODEC = BuilderCodec
             .builder(MessagesConfig.class, MessagesConfig::new)
-            .append(new KeyedCodec<>("ServerStart", Codec.STRING),
-                    (cfg, value) -> cfg.serverStart = value,
-                    cfg -> cfg.serverStart)
+            .append(new KeyedCodec<>("DiscordLabel", Codec.STRING),
+                    (cfg, value) -> cfg.discordLabel = value,
+                    cfg -> cfg.discordLabel)
             .add()
-            .append(new KeyedCodec<>("ServerStop", Codec.STRING),
-                    (cfg, value) -> cfg.serverStop = value,
-                    cfg -> cfg.serverStop)
+            .append(new KeyedCodec<>("InboundTemplate", Codec.STRING),
+                    (cfg, value) -> cfg.inboundTemplate = value,
+                    cfg -> cfg.inboundTemplate)
             .add()
-            .append(new KeyedCodec<>("PlayerJoin", Codec.STRING),
-                    (cfg, value) -> cfg.playerJoin = value,
-                    cfg -> cfg.playerJoin)
+            .append(new KeyedCodec<>("OutboundTemplate", Codec.STRING),
+                    (cfg, value) -> cfg.outboundTemplate = value,
+                    cfg -> cfg.outboundTemplate)
             .add()
-            .append(new KeyedCodec<>("PlayerLeave", Codec.STRING),
-                    (cfg, value) -> cfg.playerLeave = value,
-                    cfg -> cfg.playerLeave)
+            .append(new KeyedCodec<>("LabelColor", Codec.STRING),
+                    (cfg, value) -> cfg.labelColor = value,
+                    cfg -> cfg.labelColor)
             .add()
-            .append(new KeyedCodec<>("WorldEnter", Codec.STRING),
-                    (cfg, value) -> cfg.worldEnter = value,
-                    cfg -> cfg.worldEnter)
+            .append(new KeyedCodec<>("DefaultRoleColor", Codec.STRING),
+                    (cfg, value) -> cfg.defaultRoleColor = value,
+                    cfg -> cfg.defaultRoleColor)
             .add()
-            .append(new KeyedCodec<>("WorldLeave", Codec.STRING),
-                    (cfg, value) -> cfg.worldLeave = value,
-                    cfg -> cfg.worldLeave)
+            .append(new KeyedCodec<>("ContentColor", Codec.STRING),
+                    (cfg, value) -> cfg.contentColor = value,
+                    cfg -> cfg.contentColor)
             .add()
-            .append(new KeyedCodec<>("PlayerDeath", Codec.STRING),
-                    (cfg, value) -> cfg.playerDeath = value,
-                    cfg -> cfg.playerDeath)
-            .add()
-            .append(new KeyedCodec<>("PlayerKill", Codec.STRING),
-                    (cfg, value) -> cfg.playerKill = value,
-                    cfg -> cfg.playerKill)
+            .append(new KeyedCodec<>("AvatarUrlFormat", Codec.STRING),
+                    (cfg, value) -> cfg.avatarUrlFormat = value,
+                    cfg -> cfg.avatarUrlFormat)
             .add()
             .build();
 
-    private static final String DEFAULT_SERVER_START = ":white_check_mark: Server is now online!";
-    private static final String DEFAULT_SERVER_STOP = ":octagonal_sign: Server is shutting down.";
-    private static final String DEFAULT_PLAYER_JOIN = ":inbox_tray: %player% joined the server.";
-    private static final String DEFAULT_PLAYER_LEAVE = ":outbox_tray: %player% left the server.";
-    private static final String DEFAULT_WORLD_ENTER = ":compass: %player% entered %world%.";
-    private static final String DEFAULT_WORLD_LEAVE = ":door: %player% left %world%.";
-    private static final String DEFAULT_PLAYER_DEATH = ":skull: %player% died.";
-    private static final String DEFAULT_PLAYER_KILL = ":crossed_swords: %killer% eliminated %victim%.";
-
-    private String serverStart = DEFAULT_SERVER_START;
-    private String serverStop = DEFAULT_SERVER_STOP;
-    private String playerJoin = DEFAULT_PLAYER_JOIN;
-    private String playerLeave = DEFAULT_PLAYER_LEAVE;
-    private String worldEnter = DEFAULT_WORLD_ENTER;
-    private String worldLeave = DEFAULT_WORLD_LEAVE;
-    private String playerDeath = DEFAULT_PLAYER_DEATH;
-    private String playerKill = DEFAULT_PLAYER_KILL;
+    private String discordLabel = "[Discord]";
+    private String inboundTemplate = "%label% %role% %username%: %message%";
+    private String outboundTemplate = "**%player%**: %message%";
+    private String labelColor = "#5865F2";
+    private String defaultRoleColor = "#99AAB5";
+    private String contentColor = "#FFFFFF";
+    private String avatarUrlFormat = "https://crafthead.net/hytale/cube/%s";
 
     @NotNull
-    public String getServerStart() {
-        return serverStart == null ? DEFAULT_SERVER_START : serverStart;
+    public String getDiscordLabel() {
+        return discordLabel == null || discordLabel.isBlank() ? "[Discord]" : discordLabel;
     }
 
     @NotNull
-    public String getServerStop() {
-        return serverStop == null ? DEFAULT_SERVER_STOP : serverStop;
+    public String getInboundTemplate() {
+        return inboundTemplate == null || inboundTemplate.isBlank()
+                ? "%label% %role% %username%: %message%"
+                : inboundTemplate;
     }
 
     @NotNull
-    public String getPlayerJoin() {
-        return playerJoin == null ? DEFAULT_PLAYER_JOIN : playerJoin;
+    public String getOutboundTemplate() {
+        return outboundTemplate == null || outboundTemplate.isBlank()
+                ? "**%player%**: %message%"
+                : outboundTemplate;
     }
 
     @NotNull
-    public String getPlayerLeave() {
-        return playerLeave == null ? DEFAULT_PLAYER_LEAVE : playerLeave;
+    public String getLabelColor() {
+        return labelColor == null || labelColor.isBlank() ? "#5865F2" : labelColor;
     }
 
     @NotNull
-    public String getWorldEnter() {
-        return worldEnter == null ? DEFAULT_WORLD_ENTER : worldEnter;
+    public String getDefaultRoleColor() {
+        return defaultRoleColor == null || defaultRoleColor.isBlank() ? "#99AAB5" : defaultRoleColor;
     }
 
     @NotNull
-    public String getWorldLeave() {
-        return worldLeave == null ? DEFAULT_WORLD_LEAVE : worldLeave;
+    public String getContentColor() {
+        return contentColor == null || contentColor.isBlank() ? "#FFFFFF" : contentColor;
     }
 
     @NotNull
-    public String getPlayerDeath() {
-        return playerDeath == null ? DEFAULT_PLAYER_DEATH : playerDeath;
-    }
-
-    @NotNull
-    public String getPlayerKill() {
-        return playerKill == null ? DEFAULT_PLAYER_KILL : playerKill;
+    public String getAvatarUrlFormat() {
+        return avatarUrlFormat == null || avatarUrlFormat.isBlank()
+                ? "https://crafthead.net/hytale/cube/%s"
+                : avatarUrlFormat;
     }
 }

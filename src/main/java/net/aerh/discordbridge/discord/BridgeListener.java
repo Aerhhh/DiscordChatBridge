@@ -23,21 +23,20 @@ import java.util.logging.Level;
 
 final class BridgeListener extends ListenerAdapter {
 
+    private static final HytaleLogger LOGGER = HytaleLogger.forEnclosingClass();
+
     private final DiscordBridgeConfig config;
-    private final HytaleLogger logger;
     private final CompletableFuture<Void> readyFuture;
     private final Consumer<DiscordMessage> relayToGameChat;
     private final Consumer<TextChannel> discordChannelUpdater;
 
     BridgeListener(
             @NotNull DiscordBridgeConfig config,
-            @NotNull HytaleLogger logger,
             @NotNull CompletableFuture<Void> readyFuture,
             @NotNull Consumer<DiscordMessage> relayToGameChat,
             @NotNull Consumer<TextChannel> discordChannelUpdater
     ) {
         this.config = config;
-        this.logger = logger;
         this.readyFuture = readyFuture;
         this.relayToGameChat = relayToGameChat;
         this.discordChannelUpdater = discordChannelUpdater;
@@ -50,13 +49,13 @@ final class BridgeListener extends ListenerAdapter {
         if (channel == null) {
             IllegalStateException exception = new IllegalStateException(
                     "Unable to find text channel with id " + discordConfig.getChannelId());
-            logger.at(Level.SEVERE).withCause(exception).log("Discord bridge channel missing");
+            LOGGER.at(Level.SEVERE).withCause(exception).log("Discord bridge channel missing");
             readyFuture.completeExceptionally(exception);
             return;
         }
 
         discordChannelUpdater.accept(channel);
-        logger.at(Level.INFO).log("Discord bot connected as %s", event.getJDA().getSelfUser().getAsTag());
+        LOGGER.at(Level.INFO).log("Discord bot connected as %s", event.getJDA().getSelfUser().getAsTag());
         readyFuture.complete(null);
     }
 
